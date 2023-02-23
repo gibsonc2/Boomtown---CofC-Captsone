@@ -42,7 +42,11 @@ function App() {
 
   return (
     <div className="form-container">
-      <button className="back-button">&#8592; Back</button>
+      
+      <div class="back-button-container">
+    <button class="back-button">Back</button>
+  </div>
+
       <h1 className="title">Sign In</h1>
       <form onSubmit={handleSubmit}>
         <div>
@@ -105,7 +109,9 @@ function App() {
             I prefer to not be contacted
           </label>
         </div>
+        <div class="submit-container">
         <button type="submit">Submit</button>
+      </div>
       </form>
     </div>
   );

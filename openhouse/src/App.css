@@ -37,7 +37,7 @@
   }
 }
 
-.title {
+/* .title {
   text-align: center;
   font-weight: bold;
   text-decoration: underline;
@@ -83,4 +83,126 @@
 .submit-container {
   text-align: center;
   margin-top: 10px;
+} */
+
+/* V2 */
+
+
+/* .title {
+  text-align: center;
+  font-weight: bold;
+  text-decoration: underline;
 }
+
+.form-container {
+  margin: 0 auto;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container label {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.form-container input {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.checkbox-container {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.checkbox-container label {
+  margin-right: 10px;
+}
+
+.submit-container {
+  text-align: center;
+  margin-top: 10px;
+} */
+
+/* V3 */
+
+.title {
+  text-align: center;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.back-button-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.back-button {
+  padding: 10px;
+  background-color: #f2f2f2;
+  border: none;
+  border-radius: 5px;
+}
+
+.form-container {
+  margin: 0 auto;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container label {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.form-container input {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.checkbox-container {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.checkbox-container label {
+  margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.submit-container {
+  text-align: center;
+  margin-top: 10px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
