@@ -38,13 +38,49 @@
 }
 
 .title {
-  font-size: 24px;
+  text-align: center;
   font-weight: bold;
   text-decoration: underline;
 }
 
 .form-container {
+  margin: 0 auto;
+  width: 50%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.form-container label {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.form-container input {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.checkbox-container {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.checkbox-container label {
+  margin-right: 10px;
+}
+
+.submit-container {
+  text-align: center;
+  margin-top: 10px;
 }

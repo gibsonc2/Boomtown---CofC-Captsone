@@ -42,6 +42,7 @@ function App() {
 
   return (
     <div className="form-container">
+      <button className="back-button">&#8592; Back</button>
       <h1 className="title">Sign In</h1>
       <form onSubmit={handleSubmit}>
         <div>
