@@ -1,121 +1,86 @@
-import logo from './logo.svg';
-import './App.css';
-import React, { useState } from 'react';
+import React from "react";
 
-
-function App() {
-  const [firstName, setFirstName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [preferText, setPreferText] = useState(false);
-  const [preferEmail, setPreferEmail] = useState(false);
-  const [preferNoContact, setPreferNoContact] = useState(false);
-
-  const handleFirstNameChange = (event) => {
-    setFirstName(event.target.value);
-  };
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePhoneNumberChange = (event) => {
-    setPhoneNumber(event.target.value);
-  };
-
-  const handlePreferTextChange = (event) => {
-    setPreferText(event.target.checked);
-  };
-
-  const handlePreferEmailChange = (event) => {
-    setPreferEmail(event.target.checked);
-  };
-
-  const handlePreferNoContactChange = (event) => {
-    setPreferNoContact(event.target.checked);
-  };
+export default function App() {
+  const [fname, setFName] = React.useState("");
+  const [lname, setLName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [acceptedTerms, setAcceptedTerms] = React.useState(false);
 
   const handleSubmit = (event) => {
+    console.log(`
+      Email: ${email}
+      Password: ${fname}
+      Accepted Terms: ${acceptedTerms}
+    `);
+
     event.preventDefault();
-    // code to submit the form data goes here
-  };
+  }
 
   return (
-    <div className="form-container">
-      
-      <div class="back-button-container">
-    <button class="back-button">Back</button>
-  </div>
+    <form method='POST' action='/signin'> // will send form data to /signin in flask app
+      <h1>Create Account</h1>
 
-      <h1 className="title">Sign In</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="first-name-input">First Name:</label>
-          <input
-            id="first-name-input"
-            type="text"
-            value={firstName}
-            onChange={handleFirstNameChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="email-input">Email:</label>
-          <input
-            id="email-input"
-            type="email"
-            value={email}
-            onChange={handleEmailChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="phone-number-input">Phone Number:</label>
-          <input
-            id="phone-number-input"
-            type="tel"
-            value={phoneNumber}
-            onChange={handlePhoneNumberChange}
-          />
-        </div>
-        <div className="checkbox-container">
-          <label htmlFor="prefer-text-checkbox">
-            <input
-              id="prefer-text-checkbox"
-              type="checkbox"
-              checked={preferText}
-              onChange={handlePreferTextChange}
-            />
-            I prefer to be texted
-          </label>
-        </div>
-        <div className="checkbox-container">
-          <label htmlFor="prefer-email-checkbox">
-            <input
-              id="prefer-email-checkbox"
-              type="checkbox"
-              checked={preferEmail}
-              onChange={handlePreferEmailChange}
-            />
-            I prefer to be emailed
-          </label>
-        </div>
-        <div className="checkbox-container">
-          <label htmlFor="prefer-no-contact-checkbox">
-            <input
-              id="prefer-no-contact-checkbox"
-              type="checkbox"
-              checked={preferNoContact}
-              onChange={handlePreferNoContactChange}
-            />
-            I prefer to not be contacted
-          </label>
-        </div>
-        <div class="submit-container">
-        <button type="submit">Submit</button>
-      </div>
-      </form>
-    </div>
-  );
+      <label>
+        First Name:
+        <input
+          name="fname"
+          type="fname"
+          id="fname"
+          value={fname}
+          onChange={e => setFName(e.target.value)}
+          required />
+      </label>
+
+      <label>
+        Last Name:
+        <input
+          name="lname"
+          type="lname"
+          id="lname"
+          value={lname}
+          onChange={e => setLName(e.target.value)}
+          required />
+      </label>
+
+      <label>
+        Email:
+        <input
+          name="email"
+          type="email"
+          id="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required />
+      </label>
+
+      <label>
+        Phone:
+        <input
+          name="phone"
+          type="phone"
+          id="phone"
+          value={phone}
+          onChange={e => setPhone(e.target.value)}
+          required />
+      </label>
+
+      <label>
+        <input
+          name="acceptedTerms"
+          type="checkbox"
+          id="acceptedTerms"
+          onChange={e => setAcceptedTerms(e.target.value)}
+          required />
+        I accept the terms of service
+      </label>
+
+      <button
+          type="submit"
+          value="Submit"
+       >Submit
+      </button>
+
+    </form>
+    );
 }
-
-
-export default App;
