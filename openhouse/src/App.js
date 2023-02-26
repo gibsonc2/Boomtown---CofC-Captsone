@@ -5,20 +5,12 @@ export default function App() {
   const [lname, setLName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [phone, setPhone] = React.useState("");
-  const [acceptedTerms, setAcceptedTerms] = React.useState(false);
-
-  const handleSubmit = (event) => {
-    console.log(`
-      Email: ${email}
-      Password: ${fname}
-      Accepted Terms: ${acceptedTerms}
-    `);
-
-    event.preventDefault();
-  }
+  const [prefEmail, setPrefEmail] = React.useState("");
+  const [prefText, setPrefText] = React.useState("");
+  const [prefNone, setPrefNone] = React.useState("");
 
   return (
-    <form method='POST' action='/signin'> // will send form data to /signin in flask app
+    <form method='POST' action='/signin'>
       <h1>Create Account</h1>
 
       <label>
@@ -67,12 +59,32 @@ export default function App() {
 
       <label>
         <input
-          name="acceptedTerms"
+          name="prefEmail"
           type="checkbox"
-          id="acceptedTerms"
-          onChange={e => setAcceptedTerms(e.target.value)}
-          required />
-        I accept the terms of service
+          id="prefEmail"
+          onChange={e => setPrefEmail(e.target.value)}
+          />
+        I would like to be emailed
+      </label>
+
+      <label>
+        <input
+          name="prefText"
+          type="checkbox"
+          id="prefText"
+          onChange={e => setPrefText(e.target.value)}
+          />
+        I would like to be texted
+      </label>
+
+      <label>
+        <input
+          name="prefNone"
+          type="checkbox"
+          id="prefNone"
+          onChange={e => setPrefNone(e.target.value)}
+          />
+        I prefer not to be contacted
       </label>
 
       <button
