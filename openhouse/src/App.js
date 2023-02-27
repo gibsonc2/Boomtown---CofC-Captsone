@@ -8,91 +8,106 @@ export default function App() {
   const [prefEmail, setPrefEmail] = React.useState("");
   const [prefText, setPrefText] = React.useState("");
   const [prefNone, setPrefNone] = React.useState("");
+  const handleBack = () => {};
 
   return (
-    <form method='POST' action='/signin'>
+
+    <div>
+      <button onClick={handleBack}>Back</button>
+   
+
+
+    <form method="POST" action="/signin" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <h1>Create Account</h1>
 
-      <label>
+      <label style={{ marginBottom: "10px" }}>
         First Name:
         <input
           name="fname"
-          type="fname"
+          type="text"
           id="fname"
           value={fname}
-          onChange={e => setFName(e.target.value)}
-          required />
+          onChange={(e) => setFName(e.target.value)}
+          required
+          style={{ marginLeft: "10px" }}
+        />
       </label>
 
-      <label>
+      <label style={{ marginBottom: "10px" }}>
         Last Name:
         <input
           name="lname"
-          type="lname"
+          type="text"
           id="lname"
           value={lname}
-          onChange={e => setLName(e.target.value)}
-          required />
+          onChange={(e) => setLName(e.target.value)}
+          required
+          style={{ marginLeft: "10px" }}
+        />
       </label>
 
-      <label>
+      <label style={{ marginBottom: "10px" }}>
         Email:
         <input
           name="email"
           type="email"
           id="email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
-          required />
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          style={{ marginLeft: "26px" }}
+        />
       </label>
 
-      <label>
+      <label style={{ marginBottom: "10px" }}>
         Phone:
         <input
           name="phone"
-          type="phone"
+          type="tel"
           id="phone"
           value={phone}
-          onChange={e => setPhone(e.target.value)}
-          required />
+          onChange={(e) => setPhone(e.target.value)}
+          required
+          style={{ marginLeft: "27px" }}
+        />
       </label>
 
-      <label>
-        <input
-          name="prefEmail"
-          type="checkbox"
-          id="prefEmail"
-          onChange={e => setPrefEmail(e.target.value)}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", marginBottom: "10px" }}>
+        <label>
+          <input
+            name="prefEmail"
+            type="checkbox"
+            id="prefEmail"
+            onChange={(e) => setPrefEmail(e.target.checked)}
           />
-        I would like to be emailed
-      </label>
+          I would like to be emailed
+        </label>
 
-      <label>
-        <input
-          name="prefText"
-          type="checkbox"
-          id="prefText"
-          onChange={e => setPrefText(e.target.value)}
+        <label>
+          <input
+            name="prefText"
+            type="checkbox"
+            id="prefText"
+            onChange={(e) => setPrefText(e.target.checked)}
           />
-        I would like to be texted
-      </label>
+          I would like to be texted
+        </label>
 
-      <label>
-        <input
-          name="prefNone"
-          type="checkbox"
-          id="prefNone"
-          onChange={e => setPrefNone(e.target.value)}
+        <label>
+          <input
+            name="prefNone"
+            type="checkbox"
+            id="prefNone"
+            onChange={(e) => setPrefNone(e.target.checked)}
           />
-        I prefer not to be contacted
-      </label>
+          I prefer not to be contacted
+        </label>
+      </div>
 
-      <button
-          type="submit"
-          value="Submit"
-       >Submit
+      <button type="submit" value="Submit" style={{ marginTop: "10px" }}>
+        Submit
       </button>
-
     </form>
-    );
+    </div>
+  );
 }
