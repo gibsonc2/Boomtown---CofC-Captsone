@@ -17,6 +17,27 @@ def home():
         )
     return redirect("http://localhost:3000")
 
+@app.route("/adminPortal", methods=["GET", "POST"])
+def adminPortal():
+    db = connect_to_db()  # establish database connection
+    c = db.cursor()  # create cursor for interacting with db
+    # query db
+    c.execute("SELECT agentFName, agentLName, agentPhone, agentEmail, logoPath, agentImgPath FROM Agent")
+    items = c.fetchall()  # get every item from query in tuple
+    # return items to react server
+    # items[0] is the entire tuple retrieved from query, so we need to index further into that
+    return {
+        "fname":items[0][0], 
+        "lname":items[0][1],
+        "phone":items[0][2], 
+        "email":items[0][3],
+        "logo": items[0][4],
+        "img": items[0][5]
+    }
+    # close cursor and db connection
+    c.close()
+    db.close()
+
 def connect_to_db():
     boomtown = mysql.connector.connect(
         host="database-1.cluster-cwnezg0iyvk9.us-east-1.rds.amazonaws.com",
