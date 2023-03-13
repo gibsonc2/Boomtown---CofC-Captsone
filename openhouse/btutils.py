@@ -1,6 +1,6 @@
 import mysql.connector
 
-def connect_to_db():
+def connect_to_db():  #
     db = mysql.connector.connect(
         host="database-1.cluster-cwnezg0iyvk9.us-east-1.rds.amazonaws.com",
         user="admin",
