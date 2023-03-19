@@ -30,9 +30,17 @@ def add_agent(db, fname, lname, phone, email, password):
     
 def match_agent_info(db, email, password):
     c = db.cursor()
-    try:
-        c.execute(f"SELECT agentID FROM Agent where agentEmail = '{email}' and agentPassword = '{password}'")
-        aID = c.fetchall()[0][0]
-        return ("SUCCESS", aID)
-    except:
+    c.execute(f"SELECT agentID, agentFName, agentLName, agentEmail, agentPhone FROM Agent where agentEmail = '{email}' and agentPassword = '{password}'")
+    data = c.fetchone()
+    print(data)
+    if data is not None:
+        info = {
+            "aID": data[0],
+            "fname": data[1],
+            "lname": data[2],
+            "email": data[3],
+            "phone": data[4]
+        }
+        return ("SUCCESS", info)
+    else:
         return ("FAIL", -1)
