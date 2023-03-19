@@ -15,18 +15,36 @@ def add_guest(db, fname, lname, email, phone, commPref):
     db.commit()
     c.close()
     
-def update_agent(db, fname, lname, phone, email):
-    # change to use update table
+def update_agent(db, fname, lname, email, phone, session):
     c = db.cursor()
-    c.execute(f"INSERT INTO Agent (agentFName, agentLName, agentPhone, agentEmail) VALUES ('{fname}', '{lname}', '{phone}', '{email}')")
+    print(fname, lname, phone, email)
+    if fname != "":
+        c.execute(f"UPDATE Agent SET agentFName = '{fname}' WHERE agentID = '{session['aID']}'")
+        session.pop('fname', None)
+        session['fname'] = fname
+    if lname != "":   
+        c.execute(f"UPDATE Agent SET agentLName = '{lname}' WHERE agentID = '{session['aID']}'")
+        session.pop('lname', None)
+        session['lname'] = lname
+    if phone != "":
+        c.execute(f"UPDATE Agent SET agentPhone = '{phone}' WHERE agentID = '{session['aID']}'")
+        session.pop('phone', None)
+        session['phone'] = phone
+    if email != "":
+        c.execute(f"UPDATE Agent SET agentEmail = '{email}' WHERE agentID = '{session['aID']}'")
+        session.pop('email', None)
+        session['email'] = email
     db.commit()
     c.close()
     
 def add_agent(db, fname, lname, phone, email, password):
     c = db.cursor()
     c.execute(f"INSERT INTO Agent (agentFName, agentLName, agentPhone, agentEmail, agentPassword) VALUES ('{fname}', '{lname}', '{phone}', '{email}', '{password}')")
+    c.execute(f"SELECT agentID from Agent ORDER BY agentID DESC LIMIT 1")
+    aID = c.fetchone()
     db.commit()
     c.close()
+    return aID
     
 def match_agent_info(db, email, password):
     c = db.cursor()
