@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function GuestSignin() {
   const [fname, setFName] = React.useState("");
@@ -8,16 +9,20 @@ function GuestSignin() {
   const [prefEmail, setPrefEmail] = React.useState("");
   const [prefText, setPrefText] = React.useState("");
   const [prefNone, setPrefNone] = React.useState("");
-  const handleBack = () => {};
+  
+  const navigate = useNavigate();
+  const routeChange = () => {
+	  navigate('/');
+  }
 
   return (
 
     <div>
-      <button onClick={handleBack}>Cancel</button>
+      <button onClick={routeChange}>Cancel</button>
    
 
 
-    <form method="POST" action="/signin" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <form method="POST" action="/guestSignin" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <h1>Sign In</h1>
 
       <label style={{ marginBottom: "10px" }}>
