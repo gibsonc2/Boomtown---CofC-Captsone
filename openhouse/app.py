@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(12).hex()
-# app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_PERMANENT'] = True
 
 
 # working
@@ -54,17 +54,21 @@ def adminPortalDisplay():
     }
    
 
-# fix
+# fix for updating specific 
 @app.route("/adminPortalUpdate", methods=["GET", "POST"])
 def adminPortalUpdate():
     db = connect_to_db()
     # also need to receive images if updated
+    # print(session['fname'], session['lname'], session['email'], session['phone'])
+    print("UPDATE: AGENT ID ->", session['aID'])
+    print(request.form.get("fname"))
     update_agent(
         db, 
         request.form.get("fname"), 
         request.form.get("lname"), 
         request.form.get("email"), 
-        request.form.get("phone")
+        request.form.get("phone"),
+        session
     )
     db.close()
     return redirect("http://localhost:3000/admindisplay")
@@ -79,8 +83,10 @@ def adminPortalRegister():
     session['phone'] = request.form.get("phone")
     passwd = request.form.get("passwd")
     db = connect_to_db()
-    add_agent(db, session['fname'], session['lname'], session['email'], session['phone'], passwd) # hash password before putting into db
+    aID = add_agent(db, session['fname'], session['lname'], session['phone'], session['email'], passwd) # hash password before putting into db
     db.close()
+    session['aID'] = aID
+    print("REGISTER: AGENT ID ->", session['aID'])
     # add check for duplicate email, phone, etc
     return redirect('http://localhost:3000/admindisplay')
 
@@ -99,6 +105,7 @@ def adminPortalSignin():
         session['lname'] = info['lname']
         session['email'] = info['email']
         session['phone'] = info['phone']
+        print("SIGNIN: AGENT ID ->", session['aID'])
         return redirect('http://localhost:3000/admindisplay')
     else:
         return redirect('http://localhost:3000/adminsignin')
@@ -114,4 +121,3 @@ def getCommPrefs(einput, tinput, ninput):
         return 2 # contact by text only
     else:
         return 3 # contact by text or email
-
