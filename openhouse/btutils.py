@@ -1,14 +1,18 @@
-import mysql.connector
+import sqlite3
 
 def connect_to_db():
-    db = mysql.connector.connect(
-        host="database-1.cluster-cwnezg0iyvk9.us-east-1.rds.amazonaws.com",
-        user="admin",
-        password="boomtown",
-        database="BoomTown"
-    )
+    db = sqlite3.connect("boomtown.db")
     return db
 
+def make_tables():
+	db = connect_to_db()
+	cur = db.cursor()
+	cur.execute("CREATE TABLE IF NOT EXISTS Guest(guestID INTEGER PRIMARY KEY AUTOINCREMENT, propertyID INTEGER, guestFName TEXT, guestLName TEXT, guestEmail TEXT, guestPhone TEXT, guestCommPref INTEGER, dateOfVisit TEXT, FOREIGN KEY(propertyID) REFERENCES Property(propertyID))")
+	cur.execute("CREATE TABLE IF NOT EXISTS Agent(agentID INTEGER PRIMARY KEY AUTOINCREMENT, agentFName TEXT, agentLName TEXT, agentEmail TEXT, agentPhone TEXT, agentPass TEXT)")
+	cur.execute("CREATE TABLE IF NOT EXISTS Property(propertyID INTEGER PRIMARY KEY AUTOINCREMENT, agentID INTEGER, propertyType TEXT, propertySize TEXT, numBeds INTEGER, numBaths TEXT, FOREIGN KEY(agentID) REFERENCES Agent(agentID))")
+	db.commit()
+	print("Created tables")
+	
 def add_guest(db, fname, lname, email, phone, commPref):
     c = db.cursor()
     c.execute(f"INSERT INTO Guest (guestFName, guestLName, guestEmail, guestPhone, guestCommPref) VALUES ('{fname}', '{lname}', '{email}', '{phone}', {commPref})")
@@ -39,7 +43,7 @@ def update_agent(db, fname, lname, email, phone, session):
     
 def add_agent(db, fname, lname, phone, email, password):
     c = db.cursor()
-    c.execute(f"INSERT INTO Agent (agentFName, agentLName, agentPhone, agentEmail, agentPassword) VALUES ('{fname}', '{lname}', '{phone}', '{email}', '{password}')")
+    c.execute(f"INSERT INTO Agent (agentFName, agentLName, agentPhone, agentEmail, agentPass) VALUES ('{fname}', '{lname}', '{phone}', '{email}', '{password}')")
     c.execute(f"SELECT agentID from Agent ORDER BY agentID DESC LIMIT 1")
     aID = c.fetchone()
     db.commit()
@@ -48,7 +52,7 @@ def add_agent(db, fname, lname, phone, email, password):
     
 def match_agent_info(db, email, password):
     c = db.cursor()
-    c.execute(f"SELECT agentID, agentFName, agentLName, agentEmail, agentPhone FROM Agent where agentEmail = '{email}' and agentPassword = '{password}'")
+    c.execute(f"SELECT agentID, agentFName, agentLName, agentEmail, agentPhone FROM Agent where agentEmail = '{email}' and agentPass = '{password}'")
     data = c.fetchone()
     print(data)
     if data is not None:
@@ -62,3 +66,14 @@ def match_agent_info(db, email, password):
         return ("SUCCESS", info)
     else:
         return ("FAIL", -1)
+	
+def allowed_file(filename, ALLOWED_EXTENSIONS) -> bool:
+	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def make_filename(filename, now):
+	ext = "." + filename.rsplit('.', 1)[1].lower()
+	day = str(now.day)
+	month = str(now.month)
+	year = str(now.year)
+	time = str(now.hour) + str(now.minute) + str(now.second) + str(now.microsecond)
+	return month + day + year + "-" + time + ext
