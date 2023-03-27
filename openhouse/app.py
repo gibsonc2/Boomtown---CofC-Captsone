@@ -1,12 +1,27 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from btutils import connect_to_db, add_guest, update_agent, add_agent, match_agent_info
-import mysql.connector
+from btutils import connect_to_db, add_guest, update_agent, add_agent, match_agent_info, make_tables, allowed_file, make_filename
+from json import *
 import os
+import datetime
+
+# Setup--
+UPLOAD_FOLDER = "./media"
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+
+make_tables() # make database in main directory
+
+files = os.listdir() # check if media folder exists
+if "media" not in files:
+	os.mkdir("media") # make media folder if not exists
+# os.chdir("media") # navigate to media folder # don't do this it breaks everything
+
+MEDIA_DIRECTORY = os.getcwd() # save media directory for easy navigation back
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(12).hex()
 app.config['SESSION_PERMANENT'] = True
-
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# --Setup
 
 # working
 @app.route("/guestSignin", methods=["GET", "POST"])
@@ -110,7 +125,25 @@ def adminPortalSignin():
     else:
         return redirect('http://localhost:3000/adminsignin')
     
-    
+
+# TODO: send current agent id and property id (from react session), save image to folder within folder named with agent id
+# agent id = 1 and property id = 2 then -> .../1/2/image.extension
+# add safe_filename
+@app.route("/uploadPropertyImg", methods=["GET", "POST"])
+def uploadPropertyImg():
+	# gets file data from formData
+	file = request.files.get('file')
+	filename = request.form.get('filename')
+	print("FILE EXT: ", filename.rsplit('.', 1)[1].lower())
+	if allowed_file(filename, ALLOWED_EXTENSIONS):
+		new_filename = make_filename(filename, datetime.datetime.now())
+		file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
+		resp = {"200": "File was successfully uploaded."}
+	else:
+		resp = {"400": "Unexpected filetype."}
+	return resp
+
+
 # temporary solution
 def getCommPrefs(einput, tinput, ninput):
     if ninput == 'on':
