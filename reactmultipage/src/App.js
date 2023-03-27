@@ -19,7 +19,7 @@ function App(){
         <Route path='adminsignin' element={ <AdminSignin/> } />
         <Route path='admindisplay' element={ <AdminDisplay/> } />
         <Route path='adminupdate' element={ <AdminUpdate/> } />
-		<Route path='testupload' element={ <UploadPropImg/> } />
+	<Route path='testupload' element={ <UploadPropImg/> } />
       </Routes>
     </div>
   )
