@@ -92,18 +92,19 @@ def adminPortalUpdate():
 # working
 @app.route("/adminPortalRegister", methods=["GET", "POST"])
 def adminPortalRegister():
-    session['fname'] = request.form.get("fname")
-    session['lname'] = request.form.get("lname")
-    session['email'] = request.form.get("email")
-    session['phone'] = request.form.get("phone")
-    passwd = request.form.get("passwd")
-    db = connect_to_db()
-    aID = add_agent(db, session['fname'], session['lname'], session['phone'], session['email'], passwd) # hash password before putting into db
-    db.close()
-    session['aID'] = aID
-    print("REGISTER: AGENT ID ->", session['aID'])
+	session['fname'] = request.form.get("fname")
+	session['lname'] = request.form.get("lname")
+	session['email'] = request.form.get("email")
+	session['phone'] = request.form.get("phone")
+	passwd = request.form.get("passwd")
+	db = connect_to_db()
+	aID = add_agent(db, session['fname'], session['lname'], session['phone'], session['email'], passwd) # hash password before putting into db
+	db.close()
+	session['aID'] = aID[0]
+	os.mkdir(os.path.join(UPLOAD_FOLDER, str(aID[0])))
+	print("REGISTER: AGENT ID ->", session['aID'])
     # add check for duplicate email, phone, etc
-    return redirect('http://localhost:3000/admindisplay')
+	return redirect('http://localhost:3000/admindisplay')
 
 
 # working
@@ -132,6 +133,7 @@ def adminPortalSignin():
 @app.route("/uploadPropertyImg", methods=["GET", "POST"])
 def uploadPropertyImg():
 	# gets file data from formData
+	agentID = request.files.get('agentID')
 	file = request.files.get('file')
 	filename = request.form.get('filename')
 	print("FILE EXT: ", filename.rsplit('.', 1)[1].lower())
@@ -142,6 +144,25 @@ def uploadPropertyImg():
 	else:
 		resp = {"400": "Unexpected filetype."}
 	return resp
+
+
+# call this to get current agent info from react frontend
+@app.route("/getSessionInfo", methods=["GET", "POST"])
+def getSessionInfo():
+	agentID = session.get('aID')
+	fname = session.get('fname')
+	lname = session.get('lname')
+	email = session.get('email')
+	phone = session.get('phone')
+	
+	return {
+		"aID": agentID,
+        "fname":fname, 
+        "lname":lname,
+        "phone":phone, 
+        "email":email
+    }
+	
 
 
 # temporary solution
