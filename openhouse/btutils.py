@@ -41,7 +41,7 @@ def update_agent(db, fname, lname, email, phone, session):
     db.commit()
     c.close()
     
-def add_agent(db, fname, lname, phone, email, password):
+def add_agent(db, fname, lname, phone, email, password) -> int:
     c = db.cursor()
     c.execute(f"INSERT INTO Agent (agentFName, agentLName, agentPhone, agentEmail, agentPass) VALUES ('{fname}', '{lname}', '{phone}', '{email}', '{password}')")
     c.execute(f"SELECT agentID from Agent ORDER BY agentID DESC LIMIT 1")
@@ -50,11 +50,10 @@ def add_agent(db, fname, lname, phone, email, password):
     c.close()
     return aID
     
-def match_agent_info(db, email, password):
+def match_agent_info(db, email, password) -> tuple:
     c = db.cursor()
     c.execute(f"SELECT agentID, agentFName, agentLName, agentEmail, agentPhone FROM Agent where agentEmail = '{email}' and agentPass = '{password}'")
     data = c.fetchone()
-    print(data)
     if data is not None:
         info = {
             "aID": data[0],
@@ -70,7 +69,7 @@ def match_agent_info(db, email, password):
 def allowed_file(filename, ALLOWED_EXTENSIONS) -> bool:
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def make_filename(filename, now):
+def make_filename(filename, now) -> str:
 	ext = "." + filename.rsplit('.', 1)[1].lower()
 	day = str(now.day)
 	month = str(now.month)
