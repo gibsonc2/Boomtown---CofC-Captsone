@@ -2,26 +2,24 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
 function GuestSignin() {
-  const [fname, setFName] = React.useState("");
-  const [lname, setLName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [phone, setPhone] = React.useState("");
-  const [prefEmail, setPrefEmail] = React.useState("");
-  const [prefText, setPrefText] = React.useState("");
-  const [prefNone, setPrefNone] = React.useState("");
+	const [fname, setFName] = React.useState("");
+	const [lname, setLName] = React.useState("");
+	const [email, setEmail] = React.useState("");
+	const [phone, setPhone] = React.useState("");
+	const [prefEmail, setPrefEmail] = React.useState("");
+	const [prefText, setPrefText] = React.useState("");
+	const [prefNone, setPrefNone] = React.useState("");
   
-  const navigate = useNavigate();
-  const routeChange = () => {
-	  navigate('/');
-  }
+	const navigate = useNavigate();
+	const routeChange = () => {
+		navigate('/');
+	}
 
-  return (
+	return (
 
-    <div>
-      <button onClick={routeChange}>Cancel</button>
+		<div>
+			<button onClick={routeChange}>Cancel</button>
    
-
-
     <form method="POST" action="/guestSignin" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       <h1>Sign In</h1>
 
@@ -50,7 +48,7 @@ function GuestSignin() {
           style={{ marginLeft: "10px" }}
         />
       </label>
-
+	{ prefEmail ? (
       <label style={{ marginBottom: "10px" }}>
         Email:
         <input
@@ -63,7 +61,9 @@ function GuestSignin() {
           style={{ marginLeft: "26px" }}
         />
       </label>
-
+	  ) : null
+	}
+	{ prefText ? (
       <label style={{ marginBottom: "10px" }}>
         Phone:
         <input
@@ -76,6 +76,8 @@ function GuestSignin() {
           style={{ marginLeft: "27px" }}
         />
       </label>
+	  ) : null
+	}
 
       <p> Contact Preference:</p>
 
