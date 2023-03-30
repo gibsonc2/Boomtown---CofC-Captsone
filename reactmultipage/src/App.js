@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import { Routes, Route } from 'react-router-dom'
+import ProtectedRoutes from './util/ProtectedRoutes'
 import Home from './pages/Home'
 import GuestSignin from './pages/GuestSignin'
 import AdminRegister from './pages/AdminRegister'
@@ -13,13 +14,15 @@ function App(){
   return (
     <div className="App">
       <Routes>
-        <Route path='/' element={ <Home/> } />
-        <Route path='signin' element={ <GuestSignin/> } />
-        <Route path='adminregister' element={ <AdminRegister/> } />
-        <Route path='adminsignin' element={ <AdminSignin/> } />
-        <Route path='admindisplay' element={ <AdminDisplay/> } />
-        <Route path='adminupdate' element={ <AdminUpdate/> } />
-	<Route path='testupload' element={ <UploadPropImg/> } />
+	  	<Route element={ <ProtectedRoutes/> }>
+        	<Route path='adminregister' element={ <AdminRegister/> } />
+        	<Route path='admindisplay' element={ <AdminDisplay/> } />
+        	<Route path='adminupdate' element={ <AdminUpdate/> } />
+			<Route path='testupload' element={ <UploadPropImg/> } />
+		</Route>
+		<Route path='adminsignin' element={ <AdminSignin/> } />
+		<Route path='signin' element={ <GuestSignin/> } />
+		<Route path='/' element={ <Home/> } />
       </Routes>
     </div>
   )
