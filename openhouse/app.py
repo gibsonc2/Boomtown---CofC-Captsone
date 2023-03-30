@@ -17,6 +17,8 @@ if "media" not in files:
 
 MEDIA_DIRECTORY = os.getcwd() # save media directory for easy navigation back
 
+# session['logged'] = "False"
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(12).hex()
 app.config['SESSION_PERMANENT'] = True
@@ -101,6 +103,7 @@ def adminPortalRegister():
 	aID = add_agent(db, session['fname'], session['lname'], session['phone'], session['email'], passwd) # hash password before putting into db
 	db.close()
 	session['aID'] = aID[0]
+	session['logged'] = "true"
 	os.mkdir(os.path.join(UPLOAD_FOLDER, str(aID[0])))
 	print("REGISTER: AGENT ID ->", session['aID'])
     # add check for duplicate email, phone, etc
@@ -109,22 +112,29 @@ def adminPortalRegister():
 
 # working
 @app.route("/adminPortalSignin", methods=["GET", "POST"])
-def adminPortalSignin():
-    db = connect_to_db()
-    ret_val = match_agent_info(db, request.form.get("email"), request.form.get("passwd")) # hash input password in final version
-    info = ret_val[1]
+def adminPortalSignin() -> dict:
+	db = connect_to_db()
+	ret_val: tuple = match_agent_info(db, request.form.get("email"), request.form.get("passwd")) # hash input password in final version
+	info = ret_val[1]
+	print(request.form.get("email"), request.form.get("passwd"), ret_val[0], ret_val[1])
     # if user/pw pair found in db, e will be ("SUCCESS", <agentID>)
     # else, e will be ("FAIL", -1)
-    if ret_val[0] == "SUCCESS":
-        session['aID'] = info['aID']
-        session['fname'] = info['fname']
-        session['lname'] = info['lname']
-        session['email'] = info['email']
-        session['phone'] = info['phone']
-        print("SIGNIN: AGENT ID ->", session['aID'])
-        return redirect('http://localhost:3000/admindisplay')
-    else:
-        return redirect('http://localhost:3000/adminsignin')
+	if ret_val[0] == "SUCCESS":
+		aID = info['aID']
+		fname = info['fname']
+		lname = info['lname']
+		email = info['email']
+		phone = info['phone']
+		return {
+			"resCode": 200,
+			"agentID": aID,
+			"agentFName": fname,
+			"agentLName": lname,
+			"agentEmail": email,
+			"agentPhone": phone
+		}
+	else:
+		return { "resCode": 400 }
     
 
 # TODO: send current agent id and property id (from react session), save image to folder within folder named with agent id
@@ -140,9 +150,9 @@ def uploadPropertyImg():
 	if allowed_file(filename, ALLOWED_EXTENSIONS):
 		new_filename = make_filename(filename, datetime.datetime.now())
 		file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
-		resp = {"200": "File was successfully uploaded."}
+		resp = {200: "File was successfully uploaded."}
 	else:
-		resp = {"400": "Unexpected filetype."}
+		resp = {400: "Unexpected filetype."}
 	return resp
 
 
@@ -162,6 +172,13 @@ def getSessionInfo():
         "phone":phone, 
         "email":email
     }
+
+
+@app.route("/checkAuth", methods=["GET"])
+def checkAuth():
+	auth = session.get('logged')
+	print(auth)
+	return { 'logged': auth }
 	
 
 
