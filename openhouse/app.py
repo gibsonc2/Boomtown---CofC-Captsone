@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, send_file
 from btutils import connect_to_db, add_guest, update_agent, add_agent, match_agent_info, make_tables, allowed_file, make_filename
 from json import *
 import os
@@ -13,7 +13,6 @@ make_tables() # make database in main directory
 files = os.listdir() # check if media folder exists
 if "media" not in files:
 	os.mkdir("media") # make media folder if not exists
-# os.chdir("media") # navigate to media folder # don't do this it breaks everything
 
 MEDIA_DIRECTORY = os.getcwd() # save media directory for easy navigation back
 
@@ -94,20 +93,29 @@ def adminPortalUpdate():
 # working
 @app.route("/adminPortalRegister", methods=["GET", "POST"])
 def adminPortalRegister():
-	session['fname'] = request.form.get("fname")
-	session['lname'] = request.form.get("lname")
-	session['email'] = request.form.get("email")
-	session['phone'] = request.form.get("phone")
+	fname = request.form.get("fname")
+	lname = request.form.get("lname")
+	phone = request.form.get("email")
+	email = request.form.get("phone")
 	passwd = request.form.get("passwd")
+	print(fname, lname, phone, email, passwd)
 	db = connect_to_db()
-	aID = add_agent(db, session['fname'], session['lname'], session['phone'], session['email'], passwd) # hash password before putting into db
+	aID = add_agent(db, fname, lname, phone, email, passwd) # hash password before putting into db
 	db.close()
-	session['aID'] = aID[0]
-	session['logged'] = "true"
-	os.mkdir(os.path.join(UPLOAD_FOLDER, str(aID[0])))
-	print("REGISTER: AGENT ID ->", session['aID'])
+	id_path = str(aID[0])
+	os.mkdir(os.path.join(UPLOAD_FOLDER, id_path))
+	os.mkdir(os.path.join(UPLOAD_FOLDER, id_path, "AGENT"))
+	os.mkdir(os.path.join(UPLOAD_FOLDER, id_path, "PROPERTY"))
+	print("REGISTER: AGENT ID ->", aID[0])
     # add check for duplicate email, phone, etc
-	return redirect('http://localhost:3000/admindisplay')
+	return {
+			"resCode": 200,
+			"agentID": id_path,
+			"agentFName": fname,
+			"agentLName": lname,
+			"agentEmail": email,
+			"agentPhone": phone
+		}
 
 
 # working
@@ -143,13 +151,13 @@ def adminPortalSignin() -> dict:
 @app.route("/uploadPropertyImg", methods=["GET", "POST"])
 def uploadPropertyImg():
 	# gets file data from formData
-	agentID = request.files.get('agentID')
 	file = request.files.get('file')
+	agentID = request.form.get('agentID')
 	filename = request.form.get('filename')
 	print("FILE EXT: ", filename.rsplit('.', 1)[1].lower())
 	if allowed_file(filename, ALLOWED_EXTENSIONS):
 		new_filename = make_filename(filename, datetime.datetime.now())
-		file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename))
+		file.save(os.path.join(app.config['UPLOAD_FOLDER'], agentID, new_filename))
 		resp = {200: "File was successfully uploaded."}
 	else:
 		resp = {400: "Unexpected filetype."}
@@ -179,16 +187,12 @@ def checkAuth():
 	auth = session.get('logged')
 	print(auth)
 	return { 'logged': auth }
-	
 
 
-# temporary solution
-def getCommPrefs(einput, tinput, ninput):
-    if ninput == 'on':
-        return 0 # do not contact
-    elif einput == 'on' and tinput is None:
-        return 1 # contact by email only
-    elif einput is None and tinput == 'on':
-        return 2 # contact by text only
-    else:
-        return 3 # contact by text or email
+# fix me
+@app.route("/testGuestProperty", methods=["GET", "POST"])
+def testGuestProperty():
+	currID = request.form.get("agentID")
+	print(currID)
+	file_path = "real.jpg"
+	return { "file": file_path }
