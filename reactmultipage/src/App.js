@@ -9,6 +9,9 @@ import AdminSignin from './pages/AdminSignin'
 import AdminDisplay from './pages/AdminDisplay'
 import AdminUpdate from './pages/AdminUpdate'
 import UploadPropImg from './pages/AdminUploadPropImg'
+import PropertiesPage from './pages/properties'
+import PropertyAdminPage from './pages/propertiesAdminPage'
+import GuestPropertyPage from './pages/GuestPropertyPage'
 
 function App(){
   return (
@@ -20,6 +23,9 @@ function App(){
         	<Route path='adminupdate' element={ <AdminUpdate/> } />
 			<Route path='testupload' element={ <UploadPropImg/> } />
 		</Route>
+		<Route path='guestproperty' element={ <GuestPropertyPage/> } />
+		<Route path='properties' element={ <PropertiesPage/> } />
+		<Route path='propertyadmin' element={ <PropertyAdminPage/> } />
 		<Route path='adminsignin' element={ <AdminSignin/> } />
 		<Route path='signin' element={ <GuestSignin/> } />
 		<Route path='/' element={ <Home/> } />
